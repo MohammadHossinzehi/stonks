@@ -12,13 +12,17 @@ async function fetchData() {
     }
 
     const result = await response.json();
-    console.log(result);
+    console.log("Raw API result:", result);
 
-    // Clear existing table rows (optional)
+    // Parse the nested JSON in the "body" field
+    const parsedBody = JSON.parse(result.body);
+    console.log("Parsed body:", parsedBody);
+
+    // Clear existing table rows
     tableBody.innerHTML = "";
 
-    // Assuming result.data is a list of arrays: [[name, value], [name, value]]
-    result.data.forEach((item) => {
+    // Loop over data array
+    parsedBody.data.forEach((item) => {
       const row = document.createElement("tr");
       row.innerHTML = `<td>${item[0]}</td><td>${item[1]}</td>`;
       tableBody.appendChild(row);
@@ -28,5 +32,4 @@ async function fetchData() {
   }
 }
 
-// Attach click event to button
 fetchButton.addEventListener("click", fetchData);
