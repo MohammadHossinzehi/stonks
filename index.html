@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Collection</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Data Collection App</h1>
+    </header>
+
+    <main>
+      <section class="table-section">
+        <h2>Collected Data</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+            <!-- Data rows go here -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const form = document.getElementById("dataForm");
+      const tableBody = document.getElementById("dataTable");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const value = document.getElementById("value").value;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${name}</td><td>${value}</td>`;
+        tableBody.appendChild(row);
+
+        form.reset();
+      });
+    </script>
+  </body>
+</html>
