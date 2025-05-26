@@ -1,35 +1,85 @@
 const tableBody = document.getElementById("dataTable");
 const fetchButton = document.getElementById("fetchButton");
 
-// Replace this with your actual API Gateway URL
+// CONFIG
+const useLocalData = true;
+const useS3Data = false;
+const useApiData = false;
+
+// ENDPOINTS
+//const S3_URL = stonks bucket URL 
 const API_URL = "https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod";
+const LOCAL_FILE = "data/mock_data.json";
 
 async function fetchData() {
   try {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
+    let data; 
+
+    // Fetch data based on config 
+    if (useLocalData) {
+      console.log("Fetching local mock data");
+      const response = await fetch(LOCAL_FILE);
+      if(!response.ok) throw new Error("Failed to fetch local data.");
+      data = await response.json();
     }
-
-    const result = await response.json();
-    console.log("Raw API result:", result);
-
-    // Parse the nested JSON in the "body" field
-    const parsedBody = JSON.parse(result.body);
-    console.log("Parsed body:", parsedBody);
+    else if (useS3Data) {
+      console.log("Fetching S3 data");
+      if(!response.ok) throw new Error("Failed to fetch S3 data");
+      data = await response.json();
+    }
+    else if (useApiData) {
+      console.log("Fetching API data");
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Failed to fetch API data");
+      data = JSON.parse(result.body);
+    }
+    else{
+      throw new Error("No data source selected.");
+    }
 
     // Clear existing table rows
     tableBody.innerHTML = "";
 
-    // Loop over data array
-    parsedBody.data.forEach((item) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${item[0]}</td><td>${item[1]}</td><td>${item[2]}</td><td>${item[3]}</td><td>${item[4]}</td><td>${item[5]}</td><td>${item[6]}</td><td>${item[7]}</td><td>${item[8]}</td><td>${item[9]}</td>`;
-      tableBody.appendChild(row);
-    });
+    // Handle API format VS local/S3 format
+    if (useApiData) {
+      data.data.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${item[0]}</td>
+        <td>${item[1]}</td>
+        <td>${item[2]}</td>
+        <td>${item[3]}</td>
+        <td>${item[4]}</td>
+        <td>${item[5]}</td>
+        <td>${item[6]}</td>
+        <td>${item[7]}</td>
+        <td>${item[8]}</td>
+        <td>${item[9]}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    } else {
+      data.forEach((stock) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${stock.politician}</td>
+        <td>${stock.traded_issuer}</td>
+        <td>${stock.published}</td>
+        <td>${stock.traded}</td>
+        <td>${stock.filed_after}</td>
+        <td>${stock.owner}</td>
+        <td>${stock.type}</td>
+        <td>${stock.size}</td>
+        <td>${stock.price}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 
+// Add event listener to the button
 fetchButton.addEventListener("click", fetchData);

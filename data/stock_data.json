@@ -1,0 +1,24 @@
+[
+    {
+      "politician": "John Doe",
+      "traded_issuer": "Apple Inc.",
+      "published": "2025-05-01",
+      "traded": "2025-04-15",
+      "filed_after": "30 days",
+      "owner": "Spouse",
+      "type": "Buy",
+      "size": "$15,001 - $50,000",
+      "price": "$150"
+    },
+    {
+      "politician": "Jane Smith",
+      "traded_issuer": "Microsoft Corp.",
+      "published": "2025-05-02",
+      "traded": "2025-04-16",
+      "filed_after": "20 days",
+      "owner": "Self",
+      "type": "Sell",
+      "size": "$1,001 - $15,000",
+      "price": "$320"
+    }
+  ]
