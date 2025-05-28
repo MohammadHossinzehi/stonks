@@ -1,24 +1,145 @@
 [
     {
-      "politician": "John Doe",
+      "politician": "John Smoll",
       "traded_issuer": "Apple Inc.",
       "published": "2025-05-01",
       "traded": "2025-04-15",
       "filed_after": "30 days",
       "owner": "Spouse",
       "type": "Buy",
-      "size": "$15,001 - $50,000",
+      "size": "$15K-$50K",
       "price": "$150"
     },
     {
-      "politician": "Jane Smith",
+      "politician": "John Smoll",
+      "traded_issuer": "Microsoft Corp.",
+      "published": "2025-05-01",
+      "traded": "2025-04-15",
+      "filed_after": "30 days",
+      "owner": "Spouse",
+      "type": "Buy",
+      "size": "$15K-$50K",
+      "price": "$150"
+    },
+    {
+      "politician": "Jane Big",
       "traded_issuer": "Microsoft Corp.",
       "published": "2025-05-02",
       "traded": "2025-04-16",
       "filed_after": "20 days",
       "owner": "Self",
       "type": "Sell",
-      "size": "$1,001 - $15,000",
+      "size": "$1K-$15K",
       "price": "$320"
+    },
+    {
+      "politician": "John Doe",
+      "traded_issuer": "Apple Inc.",
+      "published": "2024-05-01",
+      "traded": "2024-04-28",
+      "filed_after": "3 days",
+      "owner": "Self",
+      "type": "Buy",
+      "size": "$1K-$15K",
+      "price": "$230"
+    },
+    {
+      "politician": "Jane Smith",
+      "traded_issuer": "Apple Inc.",
+      "published": "2024-05-02",
+      "traded": "2024-04-29",
+      "filed_after": "3 days",
+      "owner": "Self",
+      "type": "Sell",
+      "size": "$1K-$15K",
+      "price": "$240"
+    },
+    {
+      "politician": "Mark Johnson",
+      "traded_issuer": "Microsoft Corp.",
+      "published": "2024-05-05",
+      "traded": "2024-05-01",
+      "filed_after": "4 days",
+      "owner": "Spouse",
+      "type": "Buy",
+      "size": "$15K-$50K",
+      "price": "$310"
+    },
+    {
+      "politician": "Sarah Lee",
+      "traded_issuer": "Tesla Inc.",
+      "published": "2024-05-07",
+      "traded": "2024-05-03",
+      "filed_after": "4 days",
+      "owner": "Self",
+      "type": "Buy",
+      "size": "$50K-$100K",
+      "price": "$700"
+    },
+    {
+      "politician": "David Chen",
+      "traded_issuer": "Amazon.com Inc.",
+      "published": "2024-05-08",
+      "traded": "2024-05-04",
+      "filed_after": "4 days",
+      "owner": "Spouse",
+      "type": "Sell",
+      "size": "$15K-$50K",
+      "price": "$3,200"
+    },
+    {
+      "politician": "Laura Patel",
+      "traded_issuer": "Alphabet Inc.",
+      "published": "2024-05-10",
+      "traded": "2024-05-06",
+      "filed_after": "4 days",
+      "owner": "Self",
+      "type": "Buy",
+      "size": "$1K-$15K",
+      "price": "$2,300"
+    },
+    {
+      "politician": "Daniel Kim",
+      "traded_issuer": "Netflix Inc.",
+      "published": "2024-05-12",
+      "traded": "2024-05-08",
+      "filed_after": "4 days",
+      "owner": "Spouse",
+      "type": "Sell",
+      "size": "$15K-$50K",
+      "price": "$500"
+    },
+    {
+      "politician": "Emily Wright",
+      "traded_issuer": "Meta Platforms Inc.",
+      "published": "2024-05-14",
+      "traded": "2024-05-10",
+      "filed_after": "4 days",
+      "owner": "Self",
+      "type": "Buy",
+      "size": "$50K-$100K",
+      "price": "$350"
+    },
+    {
+      "politician": "Michael Brown",
+      "traded_issuer": "Nvidia Corp.",
+      "published": "2024-05-16",
+      "traded": "2024-05-12",
+      "filed_after": "4 days",
+      "owner": "Spouse",
+      "type": "Buy",
+      "size": "$15K-$50K",
+      "price": "$400"
+    },
+    {
+      "politician": "Olivia Green",
+      "traded_issuer": "Intel Corp.",
+      "published": "2024-05-18",
+      "traded": "2024-05-14",
+      "filed_after": "4 days",
+      "owner": "Self",
+      "type": "Sell",
+      "size": "$1K-$15K",
+      "price": "$55"
     }
   ]
