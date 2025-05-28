@@ -25,20 +25,36 @@
       </header>
 
       <main>
-        <section class="card">
+        <!-- Summary Section -->
+        <section class="card" id="summarySection">
           <h3>Summary</h3>
           <p>
             This section provides an overview of the trading data collected,
             including total trades, average prices, and key patterns observed.
           </p>
+
+          <p id="totalTrades">Total Trades: </p>
+          <p id="averagePrice">Average Price: </p>
+          <p id="keyPatterns">Key Patterns: </p>
         </section>
 
-        <section class="card">
+        <!-- Analysis Section -->
+        <section class="card" id="topPoliticianSection">
           <h3>Top Politicians by Trade Volume</h3>
           <p>
             List of politicians with the highest number of trades, along with
             the most frequently traded stocks.
           </p>
+          <ul id="topPoliticiansList"></ul>
+        </section>
+
+        <!-- High Volume Section -->
+        <section class="card" id="highVolumeSection">
+          <h3> High-Volume Trades</h3>
+          <p>
+            List of trades with the largest reported dollar sizes, highlighting the biggest buy and sell moves by politicians.
+          </p>
+          <ul id="highVolumeList"></ul>
         </section>
 
         <section class="card">
@@ -59,6 +75,6 @@
       </main>
     </div>
 
-    <script src="js/main.js"></script>
+    <script src="../js/analysis.js"></script>
   </body>
 </html>
