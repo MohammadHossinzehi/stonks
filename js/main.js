@@ -2,9 +2,9 @@ const tableBody = document.getElementById("dataTable");
 const fetchButton = document.getElementById("fetchButton");
 
 // CONFIG
-const useLocalData = true;
+const useLocalData = false;
 const useS3Data = false;
-const useApiData = false;
+const useApiData = true;
 
 // ENDPOINTS
 //const S3_URL = stonks bucket URL 
