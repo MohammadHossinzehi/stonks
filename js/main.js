@@ -31,8 +31,16 @@ async function fetchData() {
       console.log("Fetching API data");
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Failed to fetch API data");
+
+      // Log the raw API response for debugging
       const result = await response.json();
-      data = result;
+      console.log("RAW API result: ", result);
+
+      // Parse the body of the response
+      const parseBody = JSON.parse(result.body);
+      console.log("Parsed body: ", parseBody);
+
+      data = parseBody; // Use the parsed body directly
     }
     else{
       throw new Error("No data source selected.");
@@ -43,7 +51,7 @@ async function fetchData() {
 
     // Handle API format VS local/S3 format
     if (useApiData) {
-      data.data.forEach((item) => {
+      data.forEach((item) => {
         const row = document.createElement("tr");
         row.innerHTML = `
         <td>${item[0]}</td>
