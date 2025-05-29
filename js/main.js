@@ -40,7 +40,7 @@ async function fetchData() {
       const parseBody = JSON.parse(result.body);
       console.log("Parsed body: ", parseBody);
 
-      data = parseBody; // Use the parsed body directly
+      data = parseBody.data; // Use the parsed body directly
     }
     else{
       throw new Error("No data source selected.");
