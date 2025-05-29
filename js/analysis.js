@@ -123,6 +123,90 @@ function updateHighVolumeTrades(data) {
   });
 }
 
+function updatePriceTrends(data) {
+  const tickerPrices = {};
+
+  data.forEach((item) => {
+    const ticker = item.traded_issuer;
+    const price = parseFloat(item.price.replace(/[^0-9.]/g, ""));
+    
+    // Only consider valid prices
+    if (!isNaN(price)) {
+      if (!tickerPrices[ticker]) {
+        tickerPrices[ticker] = { total: 0, count: 0 };
+      }
+      tickerPrices[ticker].total += price;
+      tickerPrices[ticker].count += 1;
+    }
+  });
+
+  const trendsList = document.getElementById("priceTrendsList");
+  trendsList.innerHTML = "";
+
+  // Build display list
+  Object.entries(tickerPrices).forEach(([ticker, { total, count }]) => {
+    const avgPrice = (total / count).toFixed(2);
+    const li = document.createElement("li");
+    li.textContent = `${ticker}: Average Price: $${avgPrice} over ${count} trades`;
+    trendsList.appendChild(li);
+  });
+}
+
+function updateOwnershipPatterns(data) {
+  const ownershipStats = {};
+
+  data.forEach((item) => {
+    const owner = item.owner;
+    const politician = item.politician;
+    const price = parseFloat(item.price.replace(/[^0-9.]/g, ""));
+
+    // Initialize ownership stats if not already present
+    if (!ownershipStats[owner]){
+      ownershipStats[owner] = {
+        count: 0,
+        totalPrice: 0,
+        politicians: {},
+      };
+    }
+
+    // Update ownership stats
+    ownershipStats[owner].count += 1;
+
+    // Only consider valid prices
+    if (!isNaN(price)) {
+      ownershipStats[owner].totalPrice += price;
+    }
+
+    // Track trades by politicians
+    if (!ownershipStats[owner].politicians[politician]) {
+      ownershipStats[owner].politicians[politician] = 0;
+    }
+
+    // Increment politician trade count
+    ownershipStats[owner].politicians[politician] += 1;
+  });
+
+  const totalTrades = data.length;
+  const list = document.getElementById("ownershipPatternsList");
+  list.innerHTML = "";
+
+  Object.entries(ownershipStats).forEach(([owner, stats]) => {
+    const avgPrice = stats.totalPrice / stats.count;
+    const percentage = ((stats.count / totalTrades) * 100).toFixed(1);
+
+    const topPoliticians = Object.entries(stats.politicians)
+      .sort((a, b) => b[1] - a[1]) // Sort by count descending
+      .slice(0, 3) // Get top 3
+      .map(([name, count]) => `${name} (${count})`)
+      .join(", ");
+
+    const li = document.createElement("li");
+    li.textContent = `${owner}: ${stats.count} trades (${percentage}%), Avg Price: $${avgPrice.toFixed(2)}, Top Politicians: ${topPoliticians}`;
+  
+    list.appendChild(li);
+  });
+}
+
 async function loadAnalysisData() {
   try {
     const response = await fetch("../data/stock_data.json");
@@ -131,7 +215,8 @@ async function loadAnalysisData() {
     updateSummary(data);
     updateTopPoliticians(data);
     updateHighVolumeTrades(data);
-    // updatePriceTrends(data);
+    updatePriceTrends(data);
+    updateOwnershipPatterns(data);
   } catch (error) {
     console.error("Error Loading analysis data", error);
   }
