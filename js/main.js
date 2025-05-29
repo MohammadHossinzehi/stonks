@@ -31,7 +31,8 @@ async function fetchData() {
       console.log("Fetching API data");
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Failed to fetch API data");
-      data = JSON.parse(result.body);
+      const result = await response.json();
+      data = result;
     }
     else{
       throw new Error("No data source selected.");
