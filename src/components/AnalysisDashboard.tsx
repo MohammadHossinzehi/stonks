@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import CustomBarChart from "@/components/CustomBarChart";
-import CustomHighVolumeChart from "@/components/CustomHighVolumeChart";
-import CustomLineChart from "@/components/CustomLineChart";
-import CustomDoughnutChart from "@/components/CustomDoughnutChart";
+import CustomBarChart from "../components/CustomBarChart";
+import CustomHighVolumeChart from "../components/CustomHighVolumeChart";
+import CustomLineChart from "../components/CustomLineChart";
+import CustomDoughnutChart from "../components/CustomDoughnutChart";
 
 interface StockItem {
   politician: string;
