@@ -57,7 +57,7 @@ function CustomTooltip({ active, payload, label }: any) {
           <ul className="list-disc pl-4">
             {Object.entries(data.companies).map(([company, count]) => (
               <li key={company}>
-                {company}: {count}
+                {company}: {String(count)}
               </li>
             ))}
           </ul>
