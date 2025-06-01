@@ -14,7 +14,8 @@ export default function DataTable() {
     const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
     if (!res.ok) throw new Error("Failed to fetch data");
 
-    const result = await res.json();  // Directly parse JSON, no JSON.parse(body)
+    const response = await res.json();  // API Gateway's wrapped response
+    const result = JSON.parse(response.body);  // Unwrap the stringified JSON
 
     console.log("Fetched result:", result);
 
@@ -38,7 +39,6 @@ export default function DataTable() {
     setLoading(false);
   }
 };
-
 
   useEffect(() => {
     fetchData();
