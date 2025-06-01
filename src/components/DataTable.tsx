@@ -11,7 +11,7 @@ export default function DataTable() {
     setError("");
 
     try {
-      const res = await fetch("https://stonks1.s3.us-east-1.amazonaws.com/storage.json");
+      const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
       if (!res.ok) throw new Error("Failed to fetch data");
 
       const result = await res.json();
