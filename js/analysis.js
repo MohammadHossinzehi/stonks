@@ -138,28 +138,3 @@ async function loadAnalysisData() {
 }
 
 document.addEventListener("DOMContentLoaded", loadAnalysisData);
-
-async function fetchDataAndUpdateTable() {
-  try {
-    const response = await fetch(
-      "https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/"
-    );
-    const data = await response.json();
-
-    const tableBody = document.getElementById("dataTable");
-    tableBody.innerHTML = "";
-
-    data.data.forEach((row) => {
-      const tr = document.createElement("tr");
-      row.forEach((cell) => {
-        const td = document.createElement("td");
-        td.textContent = cell;
-        tr.appendChild(td);
-      });
-      tableBody.appendChild(tr);
-    });
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
-window.onload = fetchDataAndUpdateTable;
