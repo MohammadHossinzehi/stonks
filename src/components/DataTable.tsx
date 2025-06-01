@@ -1,6 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 
+function formatPolitician(raw: string): { name: string; meta: string } {
+  const match = raw.match(/^([A-Za-z]+)(Democrat|Republican)(Senate|House)([A-Z]{2})$/);
+  if (!match) return { name: raw, meta: "" };
+
+  const [, name, party, chamber, state] = match;
+  return {
+    name,
+    meta: `${party} | ${chamber} | ${state}`,
+  };
+}
+
+function formatFiledAfter(raw: string): string {
+  const match = raw.match(/days(\d+)/);
+  return match ? `${match[1]} days` : raw;
+}
+
 export default function DataTable() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,17 +35,22 @@ export default function DataTable() {
 
     console.log("Fetched result:", result);
 
-    const formatted = result.data.map((row: any[]) => ({
-      politician: row[0],
+    const formatted = result.data.map((row: any[]) => {
+    const { name, meta } = formatPolitician(row[0]);
+
+    return {
+      politician: name,
+      politician_meta: meta,
       traded_issuer: row[1],
       published: row[2],
       traded: row[3],
-      filed_after: row[4],
+      filed_after: formatFiledAfter(row[4]),
       owner: row[5],
       type: row[6],
       size: row[7],
       price: row[8]
-    }));
+    };
+  });
 
     setData(formatted);
   } catch (err: any) {
@@ -83,7 +104,14 @@ export default function DataTable() {
             ) : (
               data.map((item, idx) => (
                 <tr key={idx} className="hover:bg-[#B8C5E0] shadow p-6 font-medium">
-                  <td className="p-4 text-gray-700 text-base">{item.politician}</td>
+                  <td className="p-4 text-gray-700 text-base">
+                    <div className="flex flex-col">
+                      <span className="font-bold" style={{ whiteSpace: 'nowrap' }}>{item.politician}</span>
+                      <span className="text-xs text-gray-500 whitespace-pre-wrap break-words">
+                        {item.politician_meta.split('|').map((part: string, index: number) => part.trim()).join(' | ')}
+                      </span>
+                    </div>
+                  </td>
                   <td className="px-4 py-2 text-gray-700 text-base">{item.traded_issuer}</td>
                   <td className="px-4 py-2 text-gray-700 text-base">{item.published}</td>
                   <td className="px-4 py-2 text-gray-700 text-base">{item.traded}</td>
