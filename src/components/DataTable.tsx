@@ -7,37 +7,38 @@ export default function DataTable() {
   const [error, setError] = useState("");
 
   const fetchData = async () => {
-    setLoading(true);
-    setError("");
+  setLoading(true);
+  setError("");
 
-    try {
-      const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
-      if (!res.ok) throw new Error("Failed to fetch data");
+  try {
+    const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
+    if (!res.ok) throw new Error("Failed to fetch data");
 
-      const result = await res.json();
-      console.log("Fetched result:", result);
+    const result = await res.json();  // Directly parse JSON, no JSON.parse(body)
 
-      // Transform array data into objects
-      const formatted = result.data.map((row: any[]) => ({
-        politician: row[0],
-        traded_issuer: row[1],
-        published: row[2],
-        traded: row[3],
-        filed_after: row[4],
-        owner: row[5],
-        type: row[6],
-        size: row[7],
-        price: row[8]
-      }));
+    console.log("Fetched result:", result);
 
-      setData(formatted);
-    } catch (err: any) {
-      console.error("Error fetching data:", err);
-      setError(err.message || "Unknown error");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const formatted = result.data.map((row: any[]) => ({
+      politician: row[0],
+      traded_issuer: row[1],
+      published: row[2],
+      traded: row[3],
+      filed_after: row[4],
+      owner: row[5],
+      type: row[6],
+      size: row[7],
+      price: row[8]
+    }));
+
+    setData(formatted);
+  } catch (err: any) {
+    console.error("Error fetching data:", err);
+    setError(err.message || "Unknown error");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchData();
