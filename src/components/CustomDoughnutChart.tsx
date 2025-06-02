@@ -17,20 +17,19 @@ interface CustomChartProps {
 
 
 export default function CustomDoughnutChart({ data }: CustomChartProps) {
-    const counts = { Self: 0, Spouse: 0 };
+    const counts: Record<string, number> = {};
   
     data.forEach((item) => {
-      const owner = item.owner.toLowerCase();
-      if (owner.includes("self")) counts.Self += 1;
-      if (owner.includes("spouse")) counts.Spouse += 1;
+      const owner = item.owner.trim();
+      counts[owner] = (counts[owner] || 0) + 1;
     });
   
-    const chartData = [
-      { name: "Self", value: counts.Self },
-      { name: "Spouse", value: counts.Spouse },
-    ];
+    const chartData = Object.entries(counts).map(([name, value]) => ({
+      name,
+      value,
+    }));
   
-    const COLORS = ["#7091E6", "#ADBBDA"];
+    const COLORS = ["#7091E6", "#ADBBDA", "#F7C59F", "#EF6F6C", "#9BC1BC", "#5D576B"];
   
     return (
       <ResponsiveContainer width="100%" height="100%">

@@ -26,16 +26,23 @@ export default function CustomBarChart({ data }: CustomBarChartProps) {
             (acc[item.politician].companies[item.traded_issuer] || 0) + 1;
           return acc;
         }, {} as Record<string, { count: number; companies: Record<string, number> }>)
-      ).map(([name, details]) => ({
-        name,
-        count: details.count,
-        companies: details.companies,
-      }));
+      )
+        .map(([name, details]) => ({
+          name,
+          count: details.count,
+          companies: details.companies,
+      }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
   
       return (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData}>
-            <XAxis dataKey="name" interval={0} angle={-30} textAnchor="end" height={70} />
+            <XAxis
+              dataKey="name"
+              tick={false}
+              label={{ value: "Politicians", position: "insideBottom", offset: 5 }}
+            />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="count" fill="#7091E6" />

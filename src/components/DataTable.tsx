@@ -22,47 +22,61 @@ export default function DataTable() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchData = async () => {
-  setLoading(true);
-  setError("");
+  const loadExistingData = async () => {
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
-    if (!res.ok) throw new Error("Failed to fetch data");
+    try {
+      const getRes = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
+      if (!getRes.ok) throw new Error("Failed to fetch data");
 
-    const response = await res.json();  // API Gateway's wrapped response
-    const result = JSON.parse(response.body);  // Unwrap the stringified JSON
+      const response = await getRes.json();  // API Gateway's wrapped response
+      const result = JSON.parse(response.body);  // Unwrap the stringified JSON
 
-    console.log("Fetched result:", result);
+      console.log("Fetched result:", result);
 
-    const formatted = result.data.map((row: any[]) => {
-    const { name, meta } = formatPolitician(row[0]);
+      const formatted = result.data.map((row: any[]) => {
+        const { name, meta } = formatPolitician(row[0]);
+        return {
+          politician: name,
+          politician_meta: meta,
+          traded_issuer: row[1],
+          published: row[2],
+          traded: row[3],
+          filed_after: formatFiledAfter(row[4]),
+          owner: row[5],
+          type: row[6],
+          size: row[7],
+          price: row[8]
+        };
+      });
+      setData(formatted);
+    } catch (err: any) {
+      console.error("Error fetching data:", err);
+      setError(err.message || "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return {
-      politician: name,
-      politician_meta: meta,
-      traded_issuer: row[1],
-      published: row[2],
-      traded: row[3],
-      filed_after: formatFiledAfter(row[4]),
-      owner: row[5],
-      type: row[6],
-      size: row[7],
-      price: row[8]
-    };
-  });
+  const refreshData = async() => {
+    setLoading(true);
+    setError("");
 
-    setData(formatted);
-  } catch (err: any) {
-    console.error("Error fetching data:", err);
-    setError(err.message || "Unknown error");
-  } finally {
-    setLoading(false);
-  }
-};
+    try{
+      const postRes = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/", {method: "POST"});
+      if(!postRes.ok) throw new Error("Failed to refresh data");
+
+      await loadExistingData();
+    }catch (err: any) {
+      console.error("Error refreshing data:", err);
+      setError(err.message || "Unknown error");
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchData();
+    loadExistingData();
   }, []);
 
   return (
@@ -70,7 +84,7 @@ export default function DataTable() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-3xl font-semibold text-[#3D52A0]">Collected Data</h2>
         <button
-          onClick={fetchData}
+          onClick={refreshData}
           className="bg-[#7091E6] text-white px-4 py-2 rounded hover:bg-[#ADBBDA] hover:text-white"
         >
           {loading ? "Refreshing..." : "Refresh Data"}

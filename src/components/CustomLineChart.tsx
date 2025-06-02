@@ -17,31 +17,36 @@ interface CustomChartProps {
 
 export default function CustomLineChart({ data }: CustomChartProps) {
     const chartData = Object.entries(
-        data.reduce((acc, item) => {
-          const price = parseFloat(item.price.replace(/[$,]/g, ""));
-          if (!acc[item.traded_issuer]) {
-            acc[item.traded_issuer] = { total: 0, count: 0 };
+      data.reduce((acc, item) => {
+        if (item.price) {
+          const cleaned = item.price.replace(/[$,]/g, "");
+          const price = parseFloat(cleaned);
+          if (!isNaN(price)) {
+            if (!acc[item.traded_issuer]) {
+              acc[item.traded_issuer] = { total: 0, count: 0 };
+            }
+            acc[item.traded_issuer].total += price;
+            acc[item.traded_issuer].count += 1;
           }
-          acc[item.traded_issuer].total += price;
-          acc[item.traded_issuer].count += 1;
-          return acc;
-        }, {} as Record<string, { total: number; count: number }>)
-      ).map(([name, details]) => ({
-        name,
-        avgPrice: details.total / details.count,
-        count: details.count,
-      }));
+        }
+        return acc;
+      }, {} as Record<string, { total: number; count: number }>)
+    ).map(([name, details]) => ({
+      name,
+      avgPrice: details.total / details.count,
+      count: details.count,
+    }))
+    .sort((a, b) => b.avgPrice - a.avgPrice)
+    .slice(0, 10);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={chartData}>
-      <XAxis
-          dataKey="name"
-          interval={0}
-          angle={-30}
-          textAnchor="end"
-          height={70}
-        />
+        <XAxis
+            dataKey="name"
+            tick={false}
+            label={{ value: "Stock Names", position: "insideBottom", offset: 5 }}
+          />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
         <Line type="monotone" dataKey="avgPrice" stroke="#7091E6" />

@@ -22,7 +22,10 @@ interface CustomBarChartProps {
         acc[item.politician] = (acc[item.politician] || 0) + 1;
         return acc;
       }, {} as Record<string, number>)
-    ).map(([name, count]) => ({ name, count }));
+    )
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
   
     return (
       <ResponsiveContainer width="100%" height="100%">
