@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -19,9 +23,83 @@
   }
 }
 
+
+
+/* page.tsx */
+.headerTitle {
+  @apply text-3xl font-bold text-[#3D52A0] p-1;
+}
+
+.headerDescription {
+  @apply text-lg text-gray-700 p-1 pb-5;
+}
+
+/* layout.tsx */
+
 body {
-  background-color: #ADBBDA;
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.bodyStyle {
+  @apply antialiased min-h-screen flex bg-[#ADBBDA] text-[#171717];
+}
+
+/* DataTable.tsx */
+
+.mainContainer {
+  @apply bg-[#EDE8F5]/80 rounded-lg shadow p-6;
+}
+
+.tableTitle {
+  @apply text-3xl font-semibold text-[#3D52A0];
+}
+
+.customButton {
+  @apply bg-[#7091E6] text-white px-4 py-2 rounded hover:bg-[#ADBBDA] hover:text-white;
+}
+
+.groupHeader {
+  @apply shadow p-6 text-[#3D52A0] text-lg font-semibold;
+}
+
+.tableHeader {
+  @apply  px-4 py-2 text-left;
+}
+
+.dataDivider {
+  @apply hover:bg-[#B8C5E0] shadow p-6 font-medium;
+}
+
+.dataCellSpaced {
+  @apply px-4 py-2 text-gray-700 text-base whitespace-nowrap;
+}
+
+.dataCell {
+  @apply px-2 py-1 rounded text-base bg-[#7091E6] text-white;
+}
+
+.spanCells {
+  @apply text-sm text-gray-500;
+}
+
+/* SideBar.tsx */
+
+.sideBarContent {
+  @apply fixed left-0 top-0 h-full w-64 bg-[#EDE8F5]/80 backdrop-blur-lg border-r border-purple-200 shadow-lg z-50;
+}
+
+.trendingUpIcon {
+  @apply h-8 w-8 text-[#3D52A0];
+}
+
+.sideBarTitle {
+  @apply text-2xl font-bold text-[#3D52A0];
+}
+
+.activeTab {
+  @apply bg-[#7091E6] text-[#3D52A0] shadow;
+}
+
+.inactiveTab {
+  @apply text-gray-700 hover:bg-[#ADBBDA] hover:text-white;
+}

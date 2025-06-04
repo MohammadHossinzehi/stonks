@@ -5,8 +5,8 @@ export default function HomePage() {
     <div>
       <main className="mb-8">
         <header className="mb-6">
-          <h1 className="text-3xl font-bold text-[#3D52A0] p-1">Political Trading Dashboard</h1>
-          <p className="text-lg text-gray-700 p-1 pb-5">
+          <h1 className="headerTitle">Political Trading Dashboard</h1>
+          <p className="headerDescription">
             Track and analyze political stock trading data in real-time
           </p>
         </header>

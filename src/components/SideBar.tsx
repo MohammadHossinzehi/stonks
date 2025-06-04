@@ -14,11 +14,11 @@ export default function Sidebar() {
     const pathname = usePathname();
 
     return (
-      <aside className="fixed left-0 top-0 h-full w-64 bg-[#EDE8F5]/80 backdrop-blur-lg border-r border-purple-200 shadow-lg z-50">
+      <aside className="sideBarContent">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
-            <TrendingUp className="h-8 w-8 text-[#3D52A0]" />
-            <h1 className="text-2xl font-bold text-[#3D52A0]">Stonks</h1>
+            <TrendingUp className="trendingUpIcon" />
+            <h1 className="sideBarTitle">Stonks</h1>
           </div>
 
           <ul className="space-y-2">
@@ -35,11 +35,11 @@ export default function Sidebar() {
                     href={item.href}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                       isActive
-                        ? "bg-[#7091E6] text-[#3D52A0] shadow"
-                        : "text-gray-700 hover:bg-[#ADBBDA] hover:text-white"
+                        ? "activeTab"
+                        : "inactiveTab"
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon />
                     <span className="font-medium">{item.name}</span>
                   </Link>
                 </li>

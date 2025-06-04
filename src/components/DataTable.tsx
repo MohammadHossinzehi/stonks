@@ -22,12 +22,14 @@ export default function DataTable() {
 
       const formatted = result.data.map((row: any[]) => {
         const { name, meta } = formatPolitician(row[0]);
+        const { name: issuerName, ticker } = formatIssuer(row[1]);
         return {
           politician: name,
           politician_meta: meta,
-          traded_issuer: row[1],
-          published: row[2],
-          traded: row[3],
+          traded_issuer_name: issuerName,
+          traded_issuer_ticker: ticker,
+          published: formatPublished(row[2]),
+          traded: formatTraded(row[3]),
           filed_after: formatFiledAfter(row[4]),
           owner: row[5],
           type: row[6],
@@ -76,12 +78,14 @@ export default function DataTable() {
       const result = JSON.parse(response.body);
       const formatted = result.data.map((row: any[]) => {
         const { name, meta } = formatPolitician(row[0]);
+        const { name: issuerName, ticker } = formatIssuer(row[1]);
         return {
           politician: name,
           politician_meta: meta,
-          traded_issuer: row[1],
-          published: row[2],
-          traded: row[3],
+          traded_issuer_name: issuerName,
+          traded_issuer_ticker: ticker,
+          published: formatPublished(row[2]),
+          traded: formatTraded(row[3]),
           filed_after: formatFiledAfter(row[4]),
           owner: row[5],
           type: row[6],
@@ -102,16 +106,16 @@ export default function DataTable() {
   };
 
   useEffect(() => {
-    loadExistingData();
+    fetchData();
   }, []);
 
   return (
-    <div className="bg-[#EDE8F5]/80 rounded-lg shadow p-6">
+    <div className="mainContainer">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-3xl font-semibold text-[#3D52A0]">Collected Data</h2>
+        <h2 className="tableTitle">Collected Data</h2>
         <button
           onClick={refreshData} //Use refreshData here instead of fetchData
-          className="bg-[#7091E6] text-white px-4 py-2 rounded hover:bg-[#ADBBDA] hover:text-white"
+          className="customButton"
         >
           {loading ? "Refreshing..." : "Refresh Data"}
         </button>
@@ -121,17 +125,17 @@ export default function DataTable() {
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="shadow p-6 text-[#3D52A0] text-lg font-semibold">
+          <thead className="groupHeader">
             <tr>
-              <th className="p-4 text-left">Politician</th>
-              <th className="px-4 py-2 text-left">Traded Issuer</th>
-              <th className="px-4 py-2 text-left">Published</th>
-              <th className="px-4 py-2 text-left">Traded</th>
-              <th className="px-4 py-2 text-left">Filed After</th>
-              <th className="px-4 py-2 text-left">Owner</th>
-              <th className="px-4 py-2 text-left">Type</th>
-              <th className="px-4 py-2 text-left">Size</th>
-              <th className="px-4 py-2 text-left">Price</th>
+              <th className="tableHeader">Politician</th>
+              <th className="tableHeader">Traded Issuer</th>
+              <th className="tableHeader">Published</th>
+              <th className="tableHeader">Traded</th>
+              <th className="tableHeader">Filed After</th>
+              <th className="tableHeader">Owner</th>
+              <th className="tableHeader">Type</th>
+              <th className="tableHeader">Size</th>
+              <th className="tableHeader">Price</th>
             </tr>
           </thead>
           <tbody>
@@ -143,31 +147,35 @@ export default function DataTable() {
               </tr>
             ) : (
               data.map((item, idx) => (
-                <tr key={idx} className="hover:bg-[#B8C5E0] shadow p-6 font-medium">
+                <tr key={idx} className="dataDivider">
                   <td className="p-4 text-gray-700 text-base">
                     <div className="flex flex-col">
-                      <span className="font-bold" style={{ whiteSpace: "nowrap" }}>{item.politician}</span>
-                      <span className="text-xs text-gray-500 whitespace-pre-wrap break-words">
-                        {item.politician_meta.split('|').map((part: string) => part.trim()).join(' | ')}
+                      <span className="font-bold" style={{ whiteSpace: "nowrap" }}>
+                        {item.politician} <span className="spanCells">{item.politician_meta}</span>
                       </span>
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.traded_issuer}</td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.published}</td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.traded}</td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.filed_after}</td>
-                  <td className="px-4 py-2 text-gray-700 text-base">
-                    <span className="px-2 py-1 rounded text-base bg-[#7091E6] text-white">
+                  <td className="px-4 py-2 text-gray-700 text-base ">
+                    <span className="font-medium">{item.traded_issuer_name}</span>
+                    {item.traded_issuer_ticker && (
+                      <span className="spanCells"> ({item.traded_issuer_ticker})</span>
+                    )}
+                  </td>
+                  <td className="dataCellSpaced">{item.published}</td>
+                  <td className="dataCellSpaced">{item.traded}</td>
+                  <td className="dataCellSpaced">{item.filed_after}</td>
+                  <td className="dataCellSpaced">
+                    <span className="dataCell">
                       {item.owner}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-gray-700">
-                    <span className="px-2 py-1 rounded text-base bg-[#7091E6] text-white">
+                  <td className="dataCellSpaced">
+                    <span className="dataCell uppercase">
                       {item.type}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.size}</td>
-                  <td className="px-4 py-2 text-gray-700 text-base">{item.price}</td>
+                  <td className="dataCellSpaced">{item.size}</td>
+                  <td className="dataCellSpaced">{item.price}</td>
                 </tr>
               ))
             )}
@@ -179,13 +187,16 @@ export default function DataTable() {
 }
 
 function formatPolitician(raw: string): { name: string; meta: string } {
-  const match = raw.match(/^([A-Za-z]+)(Democrat|Republican)(Senate|House)([A-Z]{2})$/);
+  
+  // Match everything before party as the full name, then party/chamber/state
+  const match = raw.match(/^(.*?)(Democrat|Republican)(Senate|House)([A-Z]{2})$/);
   if (!match) return { name: raw, meta: "" };
 
-  const [, name, party, chamber, state] = match;
+  const [, fullName, party, chamber, state] = match;
+
   return {
-    name,
-    meta: `${party} | ${chamber} | ${state}`,
+    name: fullName.trim(), // e.g. "David Taylor"
+    meta: `(${party}${chamber}${state})`, // e.g. "(RepublicanHouseOH)"
   };
 }
 
@@ -194,3 +205,32 @@ function formatFiledAfter(raw: string): string {
   return match ? `${match[1]} days` : raw;
 }
 
+function formatPublished(raw: string): string {
+  // Case 1: "13:05Yesterday" → "13:05 Yesterday"
+  if (/^\d{2}:\d{2}\w+/.test(raw)) {
+    return raw.replace(/^(\d{2}:\d{2})(\w)/, "$1 $2");
+  }
+
+  // Case 3: "2 Jun2025" → "2 Jun 2025"
+  if (/^\d{1,2} [A-Za-z]{3}\d{4}$/.test(raw)) {
+    return raw.replace(/^(\d{1,2}) ([A-Za-z]{3})(\d{4})$/, "$1 $2 $3");
+  }
+
+  // Default fallback
+  return raw;
+}
+
+function formatTraded(raw: string): string {
+  return raw.replace(/^(\d{1,2} [A-Za-z]{3})(\d{4})$/, "$1 $2");
+}
+
+function formatIssuer(raw: string): { name: string; ticker: string } {
+  const match = raw.match(/^(.*?)([A-Z$]+:[A-Z]{2})$/);
+  if (!match) return { name: raw, ticker: "" };
+
+  const [, name, ticker] = match;
+  return {
+    name: name.trim(),
+    ticker,
+  };
+}

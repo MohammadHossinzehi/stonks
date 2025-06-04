@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stonks - Congressional Stock Trading Dashboard
 
-## Getting Started
+[![Live Site](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel)](https://main.d3mjnwrqvz2taq.amplifyapp.com/)
 
-First, run the development server:
+Stonks is a web application that visualizes stock trades made by U.S. politicians, using data scraped from [CapitolTrades](https://www.capitoltrades.com/). 
+It helps users identify trends, high-volume trades, and ownership patterns among elected officials.
+
+## 🚀 Features
+- 📊 Interactive charts for:
+  - Top Politicians by Trade Volume
+  - High-Volume Trades
+  - Price Trends by Company
+  - Ownership Patterns (Self, Spouse, Undisclosed)
+- 🔄 Real-time data refresh via AWS Lambda + API Gateway
+- 🧠 Automatically formats and cleans scraped data
+- 💡 Responsive, mobile-friendly layout built with Tailwind CSS
+- ☁️ Hosted on AWS Amplify
+
+## 🛠 Tech Stack
+- Frontend: Next.js 15, React, TypeScript
+- Styling: Tailwind CSS
+- Backend: AWS Lambda, API Gateway
+- Hosting: AWS Amplify
+- Data Source: CapitolTrades (web scraping)
+
+## ⚙️ Getting Started (Local Dev)
 
 ```bash
+# Clone the repository:
+git clone https://github.com/your-username/stonks.git
+cd stonks
+# Install dependencies:
+npm install
+# Run the app:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 👤👤 Developers
+- [Adilet Ishenbekov](https://github.com/AdiletIshenbekov)
+- [David Nong-Ang](https://github.com/DavidNongAng)
+- [Mohammad Hossinzehi](https://github.com/MohammadHossinzehi)
