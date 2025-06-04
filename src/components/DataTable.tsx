@@ -187,7 +187,7 @@ export default function DataTable() {
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("traded_issuer_name")}>Traded Issuer{" "} {sortConfig?.key === "traded_issuer_name" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("published")}>Published{" "} {sortConfig?.key === "published" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("traded")}>Traded{" "} {sortConfig?.key === "traded" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
-              <th className="tableHeader cursor-pointer" onClick={() => handleSort("filed_after")}>Filed After{" "} {sortConfig?.key === "filed_after" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer whitespace-nowrap" onClick={() => handleSort("filed_after")}>Filed After{" "} {sortConfig?.key === "filed_after" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("owner")}>Owner{" "} {sortConfig?.key === "owner" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("type")}>Type{" "} {sortConfig?.key === "type" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
               <th className="tableHeader cursor-pointer" onClick={() => handleSort("size")}>Size{" "} {sortConfig?.key === "size" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
@@ -219,7 +219,7 @@ export default function DataTable() {
                   </td>
                   <td className="dataCellSpaced">{item.published}</td>
                   <td className="dataCellSpaced">{item.traded}</td>
-                  <td className="dataCellSpaced">{item.filed_after}</td>
+                  <td className="dataCellSpaced !text-center">{item.filed_after}</td>
                   <td className="dataCellSpaced">
                     <span className="dataCell">
                       {item.owner}
