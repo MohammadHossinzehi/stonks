@@ -5,8 +5,64 @@ export default function DataTable() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
 
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortConfig) return 0;
 
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (sortConfig.key === "published") {
+      const dateA = parsePublishedDate(aValue);
+      const dateB = parsePublishedDate(bValue);
+      return sortConfig.direction === "asc" ? dateA - dateB : dateB - dateA;
+    }
+    
+    if (sortConfig.key === "traded") {
+      const dateA = Date.parse(aValue);
+      const dateB = Date.parse(bValue);
+      return sortConfig.direction === "asc" ? dateA - dateB : dateB - dateA;
+    }
+
+    if (sortConfig.key === "filed_after") {
+      const daysA = parseInt(aValue);
+      const daysB = parseInt(bValue);
+      return sortConfig.direction === "asc" ? daysA - daysB : daysB - daysA;
+    }
+
+    if (sortConfig.key === "size") {
+      const sizeA = parseSizeRange(aValue);
+      const sizeB = parseSizeRange(bValue);
+      console.log("Size values:", aValue, "→", parseSizeRange(aValue), "|", bValue, "→", parseSizeRange(bValue));
+      return sortConfig.direction === "asc" ? sizeA - sizeB : sizeB - sizeA;
+    }
+
+    if (sortConfig.key === "price") {
+      const parsePrice = (val: string): number => {
+        if (!val || val === "N/A") return -1; // Or Infinity if you want "N/A" to go last in asc
+        return parseFloat(val.replace(/[^0-9.]/g, ""));
+      };
+    
+      const priceA = parsePrice(aValue);
+      const priceB = parsePrice(bValue);
+    
+      return sortConfig.direction === "asc" ? priceA - priceB : priceB - priceA;
+    }
+
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  })
+
+  const handleSort = (key: string) => {
+    setSortConfig(prev =>
+      prev?.key === key && prev.direction === "asc"
+        ? { key, direction: "desc" }
+        : { key, direction: "asc" }
+      );
+  };
+  
   const fetchData = async () => {
     setLoading(true);
     setError("");
@@ -127,15 +183,15 @@ export default function DataTable() {
         <table className="w-full text-sm">
           <thead className="groupHeader">
             <tr>
-              <th className="tableHeader">Politician</th>
-              <th className="tableHeader">Traded Issuer</th>
-              <th className="tableHeader">Published</th>
-              <th className="tableHeader">Traded</th>
-              <th className="tableHeader">Filed After</th>
-              <th className="tableHeader">Owner</th>
-              <th className="tableHeader">Type</th>
-              <th className="tableHeader">Size</th>
-              <th className="tableHeader">Price</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("politician")}>Politician{" "} {sortConfig?.key === "politician" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("traded_issuer_name")}>Traded Issuer{" "} {sortConfig?.key === "traded_issuer_name" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("published")}>Published{" "} {sortConfig?.key === "published" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("traded")}>Traded{" "} {sortConfig?.key === "traded" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("filed_after")}>Filed After{" "} {sortConfig?.key === "filed_after" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("owner")}>Owner{" "} {sortConfig?.key === "owner" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("type")}>Type{" "} {sortConfig?.key === "type" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("size")}>Size{" "} {sortConfig?.key === "size" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
+              <th className="tableHeader cursor-pointer" onClick={() => handleSort("price")}>Price{" "} {sortConfig?.key === "price" ? (sortConfig.direction === "asc" ? "↑" : "↓") : "↕"}</th>
             </tr>
           </thead>
           <tbody>
@@ -146,7 +202,7 @@ export default function DataTable() {
                 </td>
               </tr>
             ) : (
-              data.map((item, idx) => (
+              sortedData.map((item, idx) => (
                 <tr key={idx} className="dataDivider">
                   <td className="p-4 text-gray-700 text-base">
                     <div className="flex flex-col">
@@ -201,8 +257,8 @@ function formatPolitician(raw: string): { name: string; meta: string } {
 }
 
 function formatFiledAfter(raw: string): string {
-  const match = raw.match(/days(\d+)/);
-  return match ? `${match[1]} days` : raw;
+  const match = raw.match(/days?(\d+)/i);
+  return match ? `${parseInt(match[1])}` : "0";
 }
 
 function formatPublished(raw: string): string {
@@ -233,4 +289,43 @@ function formatIssuer(raw: string): { name: string; ticker: string } {
     name: name.trim(),
     ticker,
   };
+}
+
+function parsePublishedDate(value: string): number {
+  if (/today/i.test(value)) {
+    const [time] = value.split(" ");
+    return new Date(`${new Date().toDateString()} ${time}`).getTime();
+  }
+
+  if (/yesterday/i.test(value)) {
+    const [time] = value.split(" ");
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return new Date(`${yesterday.toDateString()} ${time}`).getTime();
+  }
+
+  // Try direct parsing for "22 May 2025" or similar
+  const timestamp = Date.parse(value);
+  return isNaN(timestamp) ? 0 : timestamp;
+}
+
+function parseSizeRange(size: string): number {
+  if (!size || typeof size !== "string") return 0;
+
+  // Normalize dash characters and remove whitespace
+  const cleaned = size.replace(/–|—|-/g, "-").replace(/\s+/g, "");
+
+  // Match first number in a range like "15K-50K" or "100K-250K"
+  const match = cleaned.match(/^(\d+(?:\.\d+)?)([KMB]?)/i);
+  if (!match) return 0;
+
+  const num = parseFloat(match[1]);
+  const unit = match[2].toUpperCase();
+
+  switch (unit) {
+    case "K": return num * 1_000;
+    case "M": return num * 1_000_000;
+    case "B": return num * 1_000_000_000;
+    default: return num;
+  }
 }

@@ -33,6 +33,7 @@ cd stonks
 npm install
 # Run the app:
 npm run dev
+```
 
 ## 👤👤 Developers
 - [Adilet Ishenbekov](https://github.com/AdiletIshenbekov)
