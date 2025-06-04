@@ -56,7 +56,17 @@ function CustomTooltip({ active, payload, label }: any) {
     const data = payload[0].payload;
 
     return (
-      <div className="bg-white p-2 rounded shadow text-sm text-black">
+      <div 
+        className="bg-white p-2 rounded shadow text-sm text-black"
+        style={{
+          maxHeight: "500px",
+          maxWidth: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          pointerEvents: "auto", // <- needed for scroll interactivity
+          zIndex: 50,
+        }}
+      >
         <p className="font-bold">{label}</p>
         <p>Total Trades: {data.count}</p>
         <p>Companies:</p>
