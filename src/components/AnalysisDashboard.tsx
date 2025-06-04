@@ -23,9 +23,23 @@ export default function AnalysisDashboard(){
   useEffect(() => {
     const loadData = async () => {
       try{
-        const res = await fetch("/data/stock_data.json");
+        const res = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
         const json = await res.json();
-        setData(json);
+        const parsedBody = JSON.parse(json.body);
+
+        const formatted = parsedBody.data.map((row: any[]) => ({
+          politician: row[0],
+          traded_issuer: row[1],
+          published: row[2],
+          traded: row[3],
+          filed_after: row[4],
+          owner: row[5],
+          type: row[6],
+          size: row[7],
+          price: row[8]
+        }));
+
+        setData(formatted);
       }catch (err){
         console.error("Error loading data", err);
       }
@@ -42,7 +56,7 @@ export default function AnalysisDashboard(){
        {/* Summary Cards */}
        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <SummaryCard title="Total Trades" value={data.length} />
-        <SummaryCard title="Average Price" value={`$${calculateAveragePrice(data)}`} />
+        <SummaryCard title="Average Trade Amount" value={`$${calculateAveragePrice(data)}`} />
         <SummaryCard title="Most Traded Stock" value={calculateMostTradedStock(data)} />
         <SummaryCard title="Trade Type Distribution" value={getBuySellSummary(data)} />
       </div>
@@ -58,7 +72,7 @@ export default function AnalysisDashboard(){
         <DetailCard title="Price Trends" description="Average prices and trade volumes by stock">
           <CustomLineChart data={data} />
         </DetailCard>
-        <DetailCard title="Ownership Patterns" description="Self vs Spouse trading distribution">
+        <DetailCard title="Ownership Patterns" description="Different ownership distribution">
           <CustomDoughnutChart data={data} />
         </DetailCard>
       </div>
@@ -96,8 +110,20 @@ function DetailCard({
 }
 
 function calculateAveragePrice(data: StockItem[]) {
-  const total = data.reduce((acc, item) => acc + parseFloat(item.price.replace(/[$,]/g, "")), 0);
-  return (total / data.length).toFixed(2);
+  let total = 0;
+  let count = 0;
+  data.forEach((item) => {
+    if(item.price) {
+      const cleaned = item.price.replace(/[$,]/g, "");
+      const price = parseFloat(cleaned);
+      if (!isNaN(price)) {
+        total += price;
+        count += 1;
+      }
+    }
+  });
+
+  return count > 0 ? (total / count).toFixed(2) : "0.00";
 }
 
 function calculateMostTradedStock(data: StockItem[]) {

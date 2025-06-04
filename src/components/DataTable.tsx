@@ -6,6 +6,7 @@ export default function DataTable() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
   const fetchData = async () => {
     setLoading(true);
     setError("");
@@ -101,7 +102,7 @@ export default function DataTable() {
   };
 
   useEffect(() => {
-    fetchData();
+    loadExistingData();
   }, []);
 
   return (
@@ -147,7 +148,7 @@ export default function DataTable() {
                     <div className="flex flex-col">
                       <span className="font-bold" style={{ whiteSpace: "nowrap" }}>{item.politician}</span>
                       <span className="text-xs text-gray-500 whitespace-pre-wrap break-words">
-                        {item.politician_meta.split("|").map((part: string, index: number) => part.trim()).join(" | ")}
+                        {item.politician_meta.split('|').map((part: string) => part.trim()).join(' | ')}
                       </span>
                     </div>
                   </td>
@@ -192,3 +193,4 @@ function formatFiledAfter(raw: string): string {
   const match = raw.match(/days(\d+)/);
   return match ? `${match[1]} days` : raw;
 }
+

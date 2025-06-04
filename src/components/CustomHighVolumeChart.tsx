@@ -1,12 +1,5 @@
 "use client";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 interface CustomHighVolumeChartProps {
   data: {
@@ -25,16 +18,16 @@ interface CustomHighVolumeChartProps {
 // Helper to approximate size ranges into numeric value
 const sizeRangeToNumber = (size: string) => {
   const ranges: Record<string, number> = {
-    "$1K-$15K": 8000,
-    "$15K-$50K": 32500,
-    "$50K-$100K": 75000,
-    "$100K-$250K": 175000,
-    "$250K-$500K": 375000,
-    "$500K-$1M": 750000,
-    "$1M-$2.5M": 1750000,
-    "$2.5M-$5M": 3750000,
-    "$5M-$10M": 7500000,
-    "$10M+": 10000000,
+    "1K–15K": 8000,
+    "15K–50K": 32500,
+    "50K–100K": 75000,
+    "100K–250K": 175000,
+    "250K–500K": 375000,
+    "500K–1M": 750000,
+    "1M–2.5M": 1750000,
+    "2.5M–5M": 3750000,
+    "5M–10M": 7500000,
+    "10M+": 10000000,
   };
   return ranges[size] || 0;
 };
@@ -51,17 +44,20 @@ export default function CustomHighVolumeChart({
       type: item.type,
       tradedDate: item.traded,
     }))
-    .filter((item) => item.approxValue >= 50000) // filter high-volume
     .sort((a, b) => b.approxValue - a.approxValue)
     .slice(0, 10); // top 10
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={highVolumeData}>
-        <XAxis dataKey="name" interval={0} angle={-30} textAnchor="end" height={70} />
+        <XAxis
+            dataKey="name"
+            tick={false}
+            label={{ value: "Politicians", position: "insideBottom", offset: 5 }}
+        />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="approxValue" fill="#7091E6" />
+        <Bar dataKey="approxValue" fill="#43A047" />
       </BarChart>
     </ResponsiveContainer>
   );
