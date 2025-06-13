@@ -1,4 +1,5 @@
 import AnalysisDashboard from "../../components/AnalysisDashboard";
+import TradeSignalTable from "../../components/TradeSignalTable";
 
 
 export default function AnalysisPage() {
@@ -15,6 +16,7 @@ export default function AnalysisPage() {
         </header>
         <section>
           <AnalysisDashboard />
+          <TradeSignalTable />
         </section>
       </main>
     </div>

@@ -95,6 +95,7 @@ export default function DataTable() {
       });
 
       setData(formatted);
+      console.log(`✅ Refreshed: ${formatted.length} politicians loaded.`);
     } catch (err: any) {
       console.error("Error fetching data:", err);
       setError(err.message || "Unknown error");
@@ -123,10 +124,10 @@ export default function DataTable() {
       if(scrapeData.error) throw new Error(scrapeData.error);
 
       //Wait for the S3 update (10 seconds delay as a simple approach)
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 15000));
 
       //Fetch updated data from pullFromStorageJSON 
-      const dataRes = await fetch("https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/");
+      const dataRes = await fetch(`https://22dcfki3yk.execute-api.us-east-1.amazonaws.com/prod/?nocache=${Date.now()}`);
 
       if (!dataRes.ok) throw new Error("Failed to fetch updated data");
 
@@ -150,6 +151,7 @@ export default function DataTable() {
         };
       });
       setData(formatted);
+      console.log(`📦 Fetched (initial load): ${formatted.length} politicians.`);
     } 
     catch(err: any) 
     {
@@ -277,7 +279,21 @@ function formatPublished(raw: string): string {
 }
 
 function formatTraded(raw: string): string {
-  return raw.replace(/^(\d{1,2} [A-Za-z]{3})(\d{4})$/, "$1 $2");
+  const cleaned = raw.replace(/(\d{1,2} [A-Za-z]{3})(\d{4})/, "$1 $2");
+  const [day, monthStr, year] = cleaned.split(" ");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthIndex = months.indexOf(monthStr);
+
+  if (monthIndex === -1) return raw;
+
+  const localDate = new Date(Number(year), monthIndex, Number(day));
+  localDate.setDate(localDate.getDate() - 1); // Force subtract 1 day
+
+  return localDate.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
 }
 
 function formatIssuer(raw: string): { name: string; ticker: string } {
