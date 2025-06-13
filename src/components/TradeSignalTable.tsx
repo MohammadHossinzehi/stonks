@@ -41,7 +41,7 @@ export default function TradeSignalTable() {
             const cleaned = t.traded.replace(/(\w{3})(\d{4})/, "$1 $2");
             const parts = cleaned.match(/(\d{1,2}) (\w{3}) (\d{4})/);
             if (!parts) return false;
-            const [_, day, monthStr, year] = parts;
+            const [, day, monthStr, year] = parts;
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             const date = new Date(Number(year), months.indexOf(monthStr), Number(day));
             return date >= cutoff;
@@ -63,7 +63,7 @@ export default function TradeSignalTable() {
         console.log("Filtered trades count:", recentTrades.length);
 
         const scores = Object.entries(counts).map(([ticker, { buys, sells }]) => {
-          let score = buys - sells;
+          const score = buys - sells;
           return { ticker, score, buys, sells };
         });
 

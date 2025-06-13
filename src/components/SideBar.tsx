@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname }  from "next/navigation";
-import { Home, BarChart3, FileText, Settings, TrendingUp } from "lucide-react"; 
+import { Home, BarChart3, TrendingUp } from "lucide-react"; 
 
 const navigation = [
   { name: "Home", href: "/", icon: Home },
