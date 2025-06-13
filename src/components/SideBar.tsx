@@ -6,8 +6,6 @@ import { Home, BarChart3, FileText, Settings, TrendingUp } from "lucide-react";
 const navigation = [
   { name: "Home", href: "/", icon: Home },
   { name: "Analysis", href: "/analysis", icon: BarChart3 },
-  { name: "Reports", href: "/reports", icon: FileText },
-  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export default function Sidebar() {
