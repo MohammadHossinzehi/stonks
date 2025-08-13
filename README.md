@@ -20,6 +20,7 @@ It helps users identify trends, high-volume trades, and ownership patterns among
 - Frontend: Next.js 15, React, TypeScript
 - Styling: Tailwind CSS
 - Backend: AWS Lambda, API Gateway
+- Storage: S3 Bucket
 - Hosting: AWS Amplify
 - Data Source: CapitolTrades (web scraping)
 
